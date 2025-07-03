@@ -21,21 +21,35 @@ jobs:
         ENDPOINT="vpn.example.com:51820"
 
         cat > wg0.conf << EOF
-        [Interface]
-        PrivateKey = $PRIVATE_KEY
-        Address = $SERVER_IP
-        ListenPort = 51820
+[Interface]
+PrivateKey = $PRIVATE_KEY
+Address = $SERVER_IP
+ListenPort = 51820
 
-        [Peer]
-        PublicKey = $CLIENT_PUB_KEY
-        AllowedIPs = $CLIENT_IP
-        EOF
+[Peer]
+PublicKey = $CLIENT_PUB_KEY
+AllowedIPs = $CLIENT_IP
+EOF
 
         cat > client.conf << EOF
-        [Interface]
-        PrivateKey = $CLIENT_PRIV_KEY
-        Address = $CLIENT_IP
-        DNS = 1.1.1.1
+[Interface]
+PrivateKey = $CLIENT_PRIV_KEY
+Address = $CLIENT_IP
+DNS = 1.1.1.1
 
-        [Peer]
-        PublicKey = $PUBLIC_KEY_
+[Peer]
+PublicKey = $PUBLIC_KEY
+Endpoint = $ENDPOINT
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 25
+EOF
+
+        qrencode -o client.png < client.conf
+
+    - name: Upload client config and QR code
+      uses: actions/upload-artifact@v4
+      with:
+        name: wireguard-client-files
+        path: |
+          client.conf
+          client.png
