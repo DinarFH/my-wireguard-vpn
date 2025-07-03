@@ -18,7 +18,7 @@ jobs:
         CLIENT_PUB_KEY=$(echo $CLIENT_PRIV_KEY | wg pubkey)
         SERVER_IP="10.0.0.1/24"
         CLIENT_IP="10.0.0.2/32"
-        ENDPOINT="vpn.example.com:51820" # замени на реальный адрес или IP
+        ENDPOINT="vpn.example.com:51820"
 
         cat > wg0.conf << EOF
         [Interface]
@@ -38,20 +38,4 @@ jobs:
         DNS = 1.1.1.1
 
         [Peer]
-        PublicKey = $PUBLIC_KEY
-        Endpoint = $ENDPOINT
-        AllowedIPs = 0.0.0.0/0
-        PersistentKeepalive = 25
-        EOF
-
-        qrencode -o client.png < client.conf
-
-    - name: Upload client config and QR code
-      uses: uses: actions/upload-artifact@v4
-
-      with:
-        name: wireguard-client-files
-        path: |
-          client.conf
-          client.png
-          
+        PublicKey = $PUBLIC_KEY_
