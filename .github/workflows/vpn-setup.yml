@@ -47,7 +47,8 @@ jobs:
         qrencode -o client.png < client.conf
 
     - name: Upload client config and QR code
-      uses: actions/upload-artifact@v3
+      uses: uses: actions/upload-artifact@v4
+
       with:
         name: wireguard-client-files
         path: |
