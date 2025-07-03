@@ -23,14 +23,14 @@ jobs:
         CLIENT_PUB_KEY=$(echo $CLIENT_PRIV_KEY | wg pubkey)
         SERVER_IP="10.0.0.1/24"
         CLIENT_IP="10.0.0.2/32"
-        ENDPOINT="vpn.example.com:51820"
+        ENDPOINT="123.123.123.123:51820"  # Замените на ваш IP-адрес VPN-сервера
 
         # Создаём серверный конфиг
         printf "[Interface]\nPrivateKey = %s\nAddress = %s\nListenPort = 51820\n\n[Peer]\nPublicKey = %s\nAllowedIPs = %s\n" \
           "$PRIVATE_KEY" "$SERVER_IP" "$CLIENT_PUB_KEY" "$CLIENT_IP" > wg0.conf
 
         # Создаём клиентский конфиг
-        printf "[Interface]\nPrivateKey = %s\nAddress = %s\nDNS = 1.1.1.1\n\n[Peer]\nPublicKey = %s\nEndpoint = %s\nAllowedIPs = 0.0.0.0/0\nPersistentKeepalive = 25\n" \
+        printf "[Interface]\nPrivateKey = %s\nAddress = %s\nDNS = 8.8.8.8\n\n[Peer]\nPublicKey = %s\nEndpoint = %s\nAllowedIPs = 0.0.0.0/0\nPersistentKeepalive = 25\n" \
           "$CLIENT_PRIV_KEY" "$CLIENT_IP" "$PUBLIC_KEY" "$ENDPOINT" > client.conf
 
         # Создаём QR-код из клиентского конфига
