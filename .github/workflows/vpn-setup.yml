@@ -9,10 +9,13 @@ jobs:
   setup-vpn:
     runs-on: ubuntu-latest
     steps:
-    - name: Setup WireGuard server and generate config
+    - name: Install dependencies
       run: |
         sudo apt update
         sudo apt install -y wireguard qrencode
+
+    - name: Generate keys and configs
+      run: |
         wg genkey | tee privatekey | wg pubkey > publickey
         PRIVATE_KEY=$(cat privatekey)
         PUBLIC_KEY=$(cat publickey)
@@ -22,7 +25,7 @@ jobs:
         CLIENT_IP="10.0.0.2/32"
         ENDPOINT="vpn.example.com:51820"
 
-        cat > wg0.conf << EOF
+        cat > wg0.conf <<EOF
 [Interface]
 PrivateKey = $PRIVATE_KEY
 Address = $SERVER_IP
@@ -33,7 +36,7 @@ PublicKey = $CLIENT_PUB_KEY
 AllowedIPs = $CLIENT_IP
 EOF
 
-        cat > client.conf << EOF
+        cat > client.conf <<EOF
 [Interface]
 PrivateKey = $CLIENT_PRIV_KEY
 Address = $CLIENT_IP
