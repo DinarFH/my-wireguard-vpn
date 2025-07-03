@@ -33,4 +33,20 @@ jobs:
         printf "[Interface]\nPrivateKey = %s\nAddress = %s\nDNS = 1.1.1.1\n\n[Peer]\nPublicKey = %s\nEndpoint = %s\nAllowedIPs = 0.0.0.0/0\nPersistentKeepalive = 25\n" \
           "$CLIENT_PRIV_KEY" "$CLIENT_IP" "$PUBLIC_KEY" "$ENDPOINT" > client.conf
 
-        # Создаём QR-код
+        # Создаём QR-код из клиентского конфига
+        qrencode -o client.png < client.conf
+
+    - name: Check client config and QR code files
+      run: |
+        echo "Listing current directory files:"
+        ls -l
+        echo "Checking specific files:"
+        ls -l client.conf client.png || echo "Files not found!"
+
+    - name: Upload client config and QR code
+      uses: actions/upload-artifact@v4
+      with:
+        name: wireguard-client-files
+        path: |
+          client.conf
+          client.png
