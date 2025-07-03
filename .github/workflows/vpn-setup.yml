@@ -1,7 +1,9 @@
 name: Setup WireGuard VPN
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   setup-vpn:
